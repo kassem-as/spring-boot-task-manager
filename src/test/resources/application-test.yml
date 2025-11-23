@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+
+  h2:
+    console:
+      enabled: false
+
+jwt:
+  secret: test-secret-key-for-testing-purposes-only-minimum-256-bits
+  expiration: 3600000
+
+logging:
+  level:
+    root: warn # Nur Warnings und Errors in Tests
+    com.example.taskmanager: INFO
