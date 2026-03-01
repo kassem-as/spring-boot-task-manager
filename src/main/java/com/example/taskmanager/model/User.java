@@ -39,6 +39,9 @@ public class User implements UserDetails {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    private boolean enabled = false;
+
     @PrePersist
     protected void onCreate(){
         createdAt = LocalDateTime.now();
@@ -76,6 +79,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

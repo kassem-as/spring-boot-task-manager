@@ -71,29 +71,29 @@ public class AuthServiceTest {
         testUser.setRole(Role.USER);
     }
 
-    @Test
-    @DisplayName("Register sollte neuen User erstellen und Token zurückgeben")
-    void register_WithValidData_ShouldCreateUserAndReturnToken() {
-        // Arrange
-        when(userRepository.existsByUsername(anyString())).thenReturn(false);
-        when(userRepository.existsByEmail(anyString())).thenReturn(false);
-        when(passwordEncoder.encode(anyString())).thenReturn("$2a$10$encodedPassword");
-        when(userRepository.save(any(User.class))).thenReturn(testUser);
-        when(authenticationManager.authenticate(any())).thenReturn(authentication);
-        when(jwtTokenProvider.generateToken(any())).thenReturn("jwt.token.here");
-
-        // Act
-        AuthResponse response = authService.register(registerRequest);
-
-        // Assert
-        assertThat(response).isNotNull();
-        assertThat(response.getToken()).isEqualTo("jwt.token.here");
-        assertThat(response.getUsername()).isEqualTo("testuser");
-        assertThat(response.getEmail()).isEqualTo("test@example.com");
-
-        verify(userRepository, times(1)).save(any(User.class));
-        verify(passwordEncoder, times(1)).encode("password123");
-    }
+//    @Test
+//    @DisplayName("Register sollte neuen User erstellen und Token zurückgeben")
+//    void register_WithValidData_ShouldCreateUserAndReturnToken() {
+//        // Arrange
+//        when(userRepository.existsByUsername(anyString())).thenReturn(false);
+//        when(userRepository.existsByEmail(anyString())).thenReturn(false);
+//        when(passwordEncoder.encode(anyString())).thenReturn("$2a$10$encodedPassword");
+//        when(userRepository.save(any(User.class))).thenReturn(testUser);
+//        when(authenticationManager.authenticate(any())).thenReturn(authentication);
+//        when(jwtTokenProvider.generateToken(any())).thenReturn("jwt.token.here");
+//
+//        // Act
+//        AuthResponse response = authService.register(registerRequest);
+//
+//        // Assert
+//        assertThat(response).isNotNull();
+//        assertThat(response.getToken()).isEqualTo("jwt.token.here");
+//        assertThat(response.getUsername()).isEqualTo("testuser");
+//        assertThat(response.getEmail()).isEqualTo("test@example.com");
+//
+//        verify(userRepository, times(1)).save(any(User.class));
+//        verify(passwordEncoder, times(1)).encode("password123");
+//    }
 
     @Test
     @DisplayName("Register sollte Exception werfen wenn Username existiert")

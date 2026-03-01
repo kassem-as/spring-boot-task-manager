@@ -30,12 +30,12 @@ public class AuthController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(
             summary = "Register new user",
-            description = "Creates a new user account and returns JWT token"
+            description = "Creates a new user account and sends a verification email"
     )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "User registered successfully"
+                    description = "User registered, Verification email sent."
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -46,13 +46,19 @@ public class AuthController {
                     description = "Username or email already exists"
             )
     })
-    public AuthResponse register(
-            @Parameter(
-                    description = "Registration details",
-                    required = true
-            )
-            @Valid @RequestBody RegisterRequest request){
-        return authService.register(request);
+    public void register(@Valid @RequestBody RegisterRequest request) {
+        authService.register(request);
+    }
+
+    @GetMapping("/verify")
+    @Operation(summary = "Verify email", description = "Verfies user email address via token from email link")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Email verified successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid or expired token")
+    })
+    public String verifyEmail(@RequestParam String token) {
+        authService.verifyEmail(token);
+        return "E-Mail erfolgreich verifiziert. Du kannst dich jetzt einloggen.";
     }
 
     @PostMapping("/login")
@@ -70,16 +76,11 @@ public class AuthController {
                     description = "Invalid credentials"
             ),
             @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid input data"
+                    responseCode = "403",
+                    description = "Email not verified"
             )
     })
-    public AuthResponse login(
-            @Parameter(
-                    description = "Login credentials",
-                    required = true
-            )
-            @Valid @RequestBody LoginRequest request) {
+    public AuthResponse login(@Valid @RequestBody LoginRequest request) {
         return authService.login(request);
     }
 }
